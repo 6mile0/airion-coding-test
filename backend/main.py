@@ -2,6 +2,8 @@ from fastapi import APIRouter, FastAPI, Depends, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 
+from endpoints import tasks
+
 app = FastAPI(debug=True)
 router = APIRouter()
 
@@ -20,10 +22,12 @@ app.add_middleware(
     max_age=600,  # Preflightリクエストのキャッシュ時間（秒）
 )
 
+app.include_router(tasks.router)
+
 @app.get("/check")
 def check_api():
     return {"status": "ok"}
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="localhost", port=8000, reload=True)
+    uvicorn.run("main:app", host="localhost", port=8000, reload=True)

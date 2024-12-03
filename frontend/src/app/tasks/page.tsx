@@ -28,6 +28,7 @@ export default function TaskLists() {
       setTitle(task?.title || '');
       setDescription(task?.description || '');
     } else {
+      setEditTaskId('');
       setTitle('');
       setDescription('');
     }

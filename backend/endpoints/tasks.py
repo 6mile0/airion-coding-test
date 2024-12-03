@@ -50,3 +50,15 @@ async def update_task(task_id: str, task_body: TaskCreate, db: AsyncSession = De
         created_at=res.created_at,
         updated_at=res.updated_at
     )
+
+@router.delete("/delete/{task_id}", response_model=TaskResponse)
+async def delete_task(task_id: str, db: AsyncSession = Depends(get_db)):
+    res = tasks.delete_task(db, task_id)
+    return TaskResponse(
+        task_id=res.id,
+        title=res.title,
+        description=res.description,
+        is_done=res.is_done,
+        created_at=res.created_at,
+        updated_at=res.updated_at
+    )

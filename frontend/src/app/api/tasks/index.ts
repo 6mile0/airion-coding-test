@@ -9,6 +9,11 @@ export type Task = {
     updated_at: string
 }
 
+export const getTasks = async () : Promise<Task[]> => {
+    const response = await fetch(`${ORIGIN}/tasks`);
+    return response.json()
+}
+
 export const addTask = async (title: string, description: string) : Promise<Task> => {
     const response = await fetch(`${ORIGIN}/tasks/add`, {
         method: 'POST',

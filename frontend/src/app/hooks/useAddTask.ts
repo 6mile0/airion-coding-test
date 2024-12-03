@@ -4,9 +4,10 @@ import { addTask } from '../api/tasks';
 type AddTaskProps = {
     title: string;
     description: string;
+    renewTasks: () => void;
 }
 
-export const useAddTask = ({ title, description }: AddTaskProps) => {
+export const useAddTask = ({ title, description, renewTasks }: AddTaskProps) => {
 
     const handleAddTask = () => {
         addTask(title, description).then((data) => {
@@ -22,6 +23,7 @@ export const useAddTask = ({ title, description }: AddTaskProps) => {
                     theme: "light",
                     transition: Bounce,
                 });
+                renewTasks();
             }
         }).catch((error) => {
             console.error('Error:', error);

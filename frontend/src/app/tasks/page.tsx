@@ -5,6 +5,9 @@ import { MessageDialog } from '../components/AddTaskModal';
 import AddButton from '../components/Buttons/Add';
 import { useAddTask } from '../hooks/useAddTask';
 import useEditTask from '../hooks/useEditTask';
+import { useGetTasks } from '../hooks/useGetTasks';
+import { TaskTable } from '../components/TaskTable';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function TaskLists() {
@@ -13,17 +16,17 @@ export default function TaskLists() {
   const [description, setDescription] = useState('');
   const [isEdit, setIsEdit] = useState(false);
 
-  const { handleAddTask } = useAddTask({ title, description });
+  const { tasks, handleGetTasks } = useGetTasks();
+  const { handleAddTask } = useAddTask({ title, description, renewTasks: handleGetTasks });
   const { editTask } = useEditTask({ title, description });
 
-  const [tasks, setTasks] = useState(['task1', 'task2', 'task3']);
-
   const handleOpenModal = (id?: string) => {
-    if(id) {
+    if (id) {
       setIsEdit(true);
-      setTitle(tasks[parseInt(id)]);
-      setDescription(tasks[parseInt(id)]);
-    }else{
+      const task = tasks.find((task) => task.task_id === id);
+      setTitle(task?.title || '');
+      setDescription(task?.description || '');
+    } else {
       setIsEdit(false);
       setTitle('');
       setDescription('');
@@ -31,14 +34,14 @@ export default function TaskLists() {
     setIsOpen(true);
   };
 
-  const handleDelete = (index: number) => {
-    setTasks(tasks.filter((_, i) => i !== index));
-  };
+  const handleDelete = (id: string) => {
+    console.log('Delete task:', id);
+  }
 
   const handleSubmit = () => {
-    if(isEdit){
+    if (isEdit) {
       editTask();
-    }else{
+    } else {
       handleAddTask();
     }
     setIsOpen(false);
@@ -51,20 +54,11 @@ export default function TaskLists() {
           <h1 className="text-2xl font-bold mb-4">タスク一覧</h1>
           <AddButton title='タスクの追加' onClick={() => handleOpenModal()} />
         </div>
-        <ul className="list-disc list-inside">
-          {tasks.map((task, index) => (
-            <li key={index} className="text-left flex justify-between items-center">
-              {task}
-              <div>
-                <button onClick={() => {
-                  setIsEdit(true);
-                  handleOpenModal(index.toString());
-                }} className="text-blue-500 mr-2">編集</button>
-                <button onClick={() => handleDelete(index)} className="text-red-500">削除</button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <TaskTable
+          tasks={tasks}
+          handleOpenModal={handleOpenModal}
+          handleDelete={handleDelete}
+          setIsEdit={setIsEdit} />
       </div>
 
       <div className="ml-6">
@@ -73,6 +67,8 @@ export default function TaskLists() {
             onSubmit={handleSubmit}
             onCancel={() => setIsOpen(false)}
             open={isOpen}
+            title={title}
+            description={description}
             setTile={setTitle}
             setDescription={setDescription}
             modalTitle={isEdit ? 'タスクの編集' : 'タスクの追加'}
@@ -84,7 +80,6 @@ export default function TaskLists() {
       <div className="fixed bottom-0 right-0 p-4">
         <ToastContainer />
       </div>
-
     </div>
   );
 }

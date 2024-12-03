@@ -1,7 +1,5 @@
 from datetime import datetime
-
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from models.task import Task
 from schemas.tasks.request import TaskCreate
 
@@ -13,3 +11,6 @@ def create_task(
     db.commit()
     db.refresh(task)
     return task
+
+def get_tasks(db: AsyncSession) -> list[Task]:
+    return db.query(Task).all()

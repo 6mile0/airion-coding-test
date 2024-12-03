@@ -9,6 +9,7 @@ import { useGetTasks } from '../hooks/useGetTasks';
 import { TaskTable } from '../components/TaskTable';
 
 import 'react-toastify/dist/ReactToastify.css';
+import { useDeleteTask } from '../hooks/useDeleteTask';
 
 export default function TaskLists() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,11 +19,12 @@ export default function TaskLists() {
   const { tasks, handleGetTasks } = useGetTasks();
   const { handleAddTask } = useAddTask({ title, description, renewTasks: handleGetTasks });
   const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ title, description, renewTasks: handleGetTasks });
+  const { handleDeleteTask } = useDeleteTask({ renewTasks: handleGetTasks });
 
-  const handleOpenModal = (id?: string) => {
-    if (id) {
-      setEditTaskId(id);
-      const task = tasks.find((task) => task.task_id === id);
+  const handleOpenModal = (task_id?: string) => {
+    if (task_id) {
+      setEditTaskId(task_id);
+      const task = tasks.find((task) => task.task_id === task_id);
       setTitle(task?.title || '');
       setDescription(task?.description || '');
     } else {
@@ -31,10 +33,6 @@ export default function TaskLists() {
     }
     setIsOpen(true);
   };
-
-  const handleDelete = (id: string) => {
-    console.log('Delete task:', id);
-  }
 
   const handleSubmit = () => {
     if (editTaskId) {
@@ -50,12 +48,12 @@ export default function TaskLists() {
       <div className="w-1/2 text-center bg-white p-6 rounded-lg shadow-lg overflow-y-auto max-h-full">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold mb-4">タスク一覧</h1>
-          <AddButton title='タスクの追加' onClick={() => handleOpenModal()} />
+          <AddButton title='タスクの追加' onClick={handleOpenModal} />
         </div>
         <TaskTable
           tasks={tasks}
           handleOpenModal={handleOpenModal}
-          handleDelete={handleDelete}
+          handleDelete={handleDeleteTask}
         />
       </div>
 

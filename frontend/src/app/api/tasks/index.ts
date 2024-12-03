@@ -36,3 +36,10 @@ export const editTask = async (task_id: string, title: string, description: stri
     return response.json()
 }
 
+
+export const deleteTask = async (task_id: string) : Promise<Task> => {
+    const response = await fetch(`${ORIGIN}/tasks/delete/${task_id}`, {
+        method: 'DELETE',
+    });
+    return response.json()
+}

@@ -1,9 +1,11 @@
 "use client";
 import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 import { MessageDialog } from '../components/AddTaskModal';
 import AddButton from '../components/Buttons/Add';
 import { useAddTask } from '../hooks/useAddTask';
 import useEditTask from '../hooks/useEditTask';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function TaskLists() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +13,7 @@ export default function TaskLists() {
   const [description, setDescription] = useState('');
   const [isEdit, setIsEdit] = useState(false);
 
-  const { addTask } = useAddTask({ title, description });
+  const { handleAddTask } = useAddTask({ title, description });
   const { editTask } = useEditTask({ title, description });
 
   const [tasks, setTasks] = useState(['task1', 'task2', 'task3']);
@@ -37,8 +39,9 @@ export default function TaskLists() {
     if(isEdit){
       editTask();
     }else{
-      addTask();
+      handleAddTask();
     }
+    setIsOpen(false);
   };
 
   return (
@@ -76,6 +79,10 @@ export default function TaskLists() {
             submitBtnTitle={isEdit ? '保存' : '追加'}
           />
         )}
+      </div>
+
+      <div className="fixed bottom-0 right-0 p-4">
+        <ToastContainer />
       </div>
 
     </div>

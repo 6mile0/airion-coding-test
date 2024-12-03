@@ -1,3 +1,5 @@
+import { toast, Bounce } from 'react-toastify';
+import { addTask } from '../api/tasks';
 
 type AddTaskProps = {
     title: string;
@@ -6,12 +8,38 @@ type AddTaskProps = {
 
 export const useAddTask = ({ title, description }: AddTaskProps) => {
 
-    const addTask = () => {
-        console.log('title:', title);
-        console.log('description:', description);
+    const handleAddTask = () => {
+        addTask(title, description).then((data) => {
+            if (data.task_id) {
+                toast.success('タスクを追加しました', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                });
+            }
+        }).catch((error) => {
+            console.error('Error:', error);
+            toast.error('エラーが発生しました', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        });
     }
 
     return {
-        addTask
+        handleAddTask
     };
 }

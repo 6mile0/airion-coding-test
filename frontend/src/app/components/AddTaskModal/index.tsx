@@ -7,11 +7,13 @@ export type ModalProps = {
   onSubmit: () => void;
   modalTitle: string;
   submitBtnTitle: string;
+  title: string;
+  description: string;
   setTile: React.Dispatch<React.SetStateAction<string>>;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const MessageDialog = ({open, onCancel, onSubmit, setTile, setDescription, modalTitle, submitBtnTitle}: ModalProps) => {
+export const MessageDialog = ({open, onCancel, onSubmit, setTile, setDescription, modalTitle, submitBtnTitle, title, description}: ModalProps) => {
   return open && (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 z-10" onClick={() => onCancel()}></div>
@@ -22,6 +24,7 @@ export const MessageDialog = ({open, onCancel, onSubmit, setTile, setDescription
         <input
           className='w-full h-10 border border-gray-300 rounded-md mb-5 px-3'
           placeholder='買い物'
+          value={title}
           onChange={(e) => setTile(e.target.value)}
         />
 
@@ -29,6 +32,7 @@ export const MessageDialog = ({open, onCancel, onSubmit, setTile, setDescription
         <textarea
           className='w-full h-20 border border-gray-300 rounded-md mb-5 px-3'
           placeholder='牛乳を買う'
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 

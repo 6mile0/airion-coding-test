@@ -11,5 +11,6 @@ class Task(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=True)
     is_done = Column(Boolean, nullable=False, default=False)
+    expires_at = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
     updated_at = Column(DateTime, nullable=True)

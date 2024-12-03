@@ -22,6 +22,7 @@ async def read_tasks(db: AsyncSession = Depends(get_db)):
             title=task.title,
             description=task.description,
             is_done=task.is_done,
+            expires_at=task.expires_at,
             created_at=task.created_at,
             updated_at=task.updated_at
         ) for task in res
@@ -35,6 +36,7 @@ async def create_task(task_body: TaskCreate, db: AsyncSession = Depends(get_db))
         title=res.title,
         description=res.description,
         is_done=res.is_done,
+        expires_at=res.expires_at,
         created_at=res.created_at,
         updated_at=res.updated_at
     )
@@ -47,6 +49,7 @@ async def update_task(task_id: str, task_body: TaskCreate, db: AsyncSession = De
         title=res.title,
         description=res.description,
         is_done=res.is_done,
+        expires_at=res.expires_at,
         created_at=res.created_at,
         updated_at=res.updated_at
     )
@@ -59,6 +62,7 @@ async def delete_task(task_id: str, db: AsyncSession = Depends(get_db)):
         title=res.title,
         description=res.description,
         is_done=res.is_done,
+        expires_at=res.expires_at,
         created_at=res.created_at,
         updated_at=res.updated_at
     )

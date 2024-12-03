@@ -23,3 +23,9 @@ def update_task(db: AsyncSession, task_id: int, task_create: TaskCreate) -> Task
     db.commit()
     db.refresh(task)
     return task
+
+def delete_task(db: AsyncSession, task_id: int) -> Task:
+    task = db.query(Task).filter(Task.id == task_id).first()
+    db.delete(task)
+    db.commit()
+    return task

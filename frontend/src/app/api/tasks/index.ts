@@ -24,3 +24,15 @@ export const addTask = async (title: string, description: string) : Promise<Task
     });
     return response.json()
 }
+
+export const editTask = async (task_id: string, title: string, description: string) : Promise<Task> => {
+    const response = await fetch(`${ORIGIN}/tasks/edit/${task_id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, description }),
+    });
+    return response.json()
+}
+

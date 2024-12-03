@@ -14,20 +14,18 @@ export default function TaskLists() {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [isEdit, setIsEdit] = useState(false);
 
   const { tasks, handleGetTasks } = useGetTasks();
   const { handleAddTask } = useAddTask({ title, description, renewTasks: handleGetTasks });
-  const { editTask } = useEditTask({ title, description });
+  const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ title, description, renewTasks: handleGetTasks });
 
   const handleOpenModal = (id?: string) => {
     if (id) {
-      setIsEdit(true);
+      setEditTaskId(id);
       const task = tasks.find((task) => task.task_id === id);
       setTitle(task?.title || '');
       setDescription(task?.description || '');
     } else {
-      setIsEdit(false);
       setTitle('');
       setDescription('');
     }
@@ -39,8 +37,8 @@ export default function TaskLists() {
   }
 
   const handleSubmit = () => {
-    if (isEdit) {
-      editTask();
+    if (editTaskId) {
+      handleEditTask();
     } else {
       handleAddTask();
     }
@@ -48,8 +46,8 @@ export default function TaskLists() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="w-1/2 text-center bg-white p-6 rounded-lg shadow-lg">
+    <div className="flex justify-center items-center bg-gray-100 text-gray-800 h-screen">
+      <div className="w-1/2 text-center bg-white p-6 rounded-lg shadow-lg overflow-y-auto max-h-full">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold mb-4">タスク一覧</h1>
           <AddButton title='タスクの追加' onClick={() => handleOpenModal()} />
@@ -58,7 +56,7 @@ export default function TaskLists() {
           tasks={tasks}
           handleOpenModal={handleOpenModal}
           handleDelete={handleDelete}
-          setIsEdit={setIsEdit} />
+        />
       </div>
 
       <div className="ml-6">
@@ -71,8 +69,8 @@ export default function TaskLists() {
             description={description}
             setTile={setTitle}
             setDescription={setDescription}
-            modalTitle={isEdit ? 'タスクの編集' : 'タスクの追加'}
-            submitBtnTitle={isEdit ? '保存' : '追加'}
+            modalTitle={editTaskId ? 'タスクの編集' : 'タスクの追加'}
+            submitBtnTitle={editTaskId ? '保存' : '追加'}
           />
         )}
       </div>

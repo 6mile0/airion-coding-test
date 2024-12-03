@@ -5,10 +5,9 @@ type TaskTableProps = {
     tasks: Task[];
     handleOpenModal: (task_id: string) => void;
     handleDelete: (task_id: string) => void;
-    setIsEdit: (isEdit: boolean) => void;
 }
 
-export const TaskTable = ({ tasks, handleOpenModal, handleDelete, setIsEdit }: TaskTableProps) => {
+export const TaskTable = ({ tasks, handleOpenModal, handleDelete}: TaskTableProps) => {
     return (
         <table className="table-auto w-full border-collapse border border-gray-200">
           <thead>
@@ -25,7 +24,6 @@ export const TaskTable = ({ tasks, handleOpenModal, handleDelete, setIsEdit }: T
                 <td className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">{task.description}</td>
                 <td className="border-t border-b border-l border-r border-gray-200 px-4 py-2">
                   <button onClick={() => {
-                    setIsEdit(true);
                     handleOpenModal(task.task_id);
                   }} className="text-blue-500 mr-2">編集</button>
                   <button onClick={() => handleDelete(task.task_id)} className="text-red-500">削除</button>

@@ -38,3 +38,15 @@ async def create_task(task_body: TaskCreate, db: AsyncSession = Depends(get_db))
         created_at=res.created_at,
         updated_at=res.updated_at
     )
+
+@router.put("/edit/{task_id}", response_model=TaskResponse)
+async def update_task(task_id: str, task_body: TaskCreate, db: AsyncSession = Depends(get_db)):
+    res = tasks.update_task(db, task_id, task_body)
+    return TaskResponse(
+        task_id=res.id,
+        title=res.title,
+        description=res.description,
+        is_done=res.is_done,
+        created_at=res.created_at,
+        updated_at=res.updated_at
+    )

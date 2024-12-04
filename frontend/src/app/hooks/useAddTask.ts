@@ -4,13 +4,14 @@ import { addTask } from '../api/tasks';
 type AddTaskProps = {
     title: string;
     description: string;
+    expiration: string;
     renewTasks: () => void;
 }
 
-export const useAddTask = ({ title, description, renewTasks }: AddTaskProps) => {
+export const useAddTask = ({ title, description, expiration, renewTasks }: AddTaskProps) => {
 
     const handleAddTask = () => {
-        addTask(title, description).then((data) => {
+        addTask(title, description, expiration).then((data) => {
             if (data.task_id) {
                 toast.success('タスクを追加しました', {
                     position: "top-right",

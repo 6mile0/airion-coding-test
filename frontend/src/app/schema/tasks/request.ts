@@ -1,5 +1,4 @@
-export interface TaskRequest {
-    task_id: string;
+export interface TaskRequestBody {
     title: string;
     description: string;
     expires_at: string;

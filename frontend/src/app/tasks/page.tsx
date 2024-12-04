@@ -10,30 +10,37 @@ import { TaskTable } from '../components/TaskTable';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { useDeleteTask } from '../hooks/useDeleteTask';
+import { TaskRequestBody } from '../schema/tasks/request';
 
 export default function TaskLists() {
   const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [expiration, setExpiration] = useState('');
+  const [taskRequestBody, setTaskRequestBody] = useState<TaskRequestBody>({
+    title: '',
+    description: '',
+    expires_at: ''
+  });
 
   const { tasks, handleGetTasks } = useGetTasks();
-  const { handleAddTask } = useAddTask({ title, description, expiration, renewTasks: handleGetTasks });
-  const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ title, description, expiration, renewTasks: handleGetTasks });
+  const { handleAddTask } = useAddTask({taskRequestBody, renewTasks: handleGetTasks });
+  const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ taskRequestBody, renewTasks: handleGetTasks });
   const { handleDeleteTask } = useDeleteTask({ renewTasks: handleGetTasks });
 
   const handleOpenModal = (task_id?: string) => {
     if (task_id) {
       setEditTaskId(task_id);
       const task = tasks.find((task) => task.task_id === task_id);
-      setTitle(task?.title || '');
-      setDescription(task?.description || '');
-      setExpiration(task?.expires_at || '');
+      setTaskRequestBody({
+        title: task?.title || '',
+        description: task?.description || '',
+        expires_at: task?.expires_at || ''
+      });
     } else {
       setEditTaskId('');
-      setTitle('');
-      setDescription('');
-      setExpiration('');
+      setTaskRequestBody({
+        title: '',
+        description: '',
+        expires_at: ''
+      });
     }
     setIsOpen(true);
   };
@@ -67,12 +74,8 @@ export default function TaskLists() {
             onSubmit={handleSubmit}
             onCancel={() => setIsOpen(false)}
             open={isOpen}
-            title={title}
-            description={description}
-            setTile={setTitle}
-            setDescription={setDescription}
-            expiration={expiration}
-            setExpiration={setExpiration}
+            taskRequestBody={taskRequestBody}
+            setTaskRequestBody={setTaskRequestBody}
             modalTitle={editTaskId ? 'タスクの編集' : 'タスクの追加'}
             submitBtnTitle={editTaskId ? '保存' : '追加'}
           />

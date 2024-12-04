@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import AddButton from '../Buttons/Add';
+import { TaskRequestBody } from '@/app/schema/tasks/request';
 
 export type ModalProps = {
   open: boolean;
@@ -7,48 +10,43 @@ export type ModalProps = {
   onSubmit: () => void;
   modalTitle: string;
   submitBtnTitle: string;
-  title: string;
-  description: string;
-  expiration: string;
-  setExpiration: React.Dispatch<React.SetStateAction<string>>;
-  setTile: React.Dispatch<React.SetStateAction<string>>;
-  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  taskRequestBody: TaskRequestBody;
+  setTaskRequestBody: (taskRequestBody: TaskRequestBody) => void;
 };
 
-export const MessageDialog = ({ open, onCancel, onSubmit, setTile, setDescription, modalTitle, submitBtnTitle, title, description, expiration, setExpiration }: ModalProps) => {
-  const [time, setTime] = useState('');
-  const [date, setDate] = useState('');
+export const MessageDialog = ({ open, onCancel, onSubmit, modalTitle, submitBtnTitle, taskRequestBody, setTaskRequestBody }: ModalProps) => {
+  console.log(taskRequestBody);
+  const [startDate, setStartDate] = useState<Date|null>(taskRequestBody.expires_at ? new Date(Number(taskRequestBody.expires_at)) : null);
 
-  
+  const handleDateTimeChange = (date: Date | null) => {
+    setStartDate(date);
+    setTaskRequestBody({ ...taskRequestBody, expires_at: date?.getTime().toString() || '' });
+  }
 
   return open && (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 z-10" onClick={() => onCancel()}></div>
-      <div className="bg-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-[33rem] p-5 flex flex-col items-start fixed z-20 rounded-lg shadow-lg">
+      <div className="bg-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-[26rem] p-5 flex flex-col items-start fixed z-20 rounded-lg shadow-lg">
         <h1 className="text-xl font-bold mb-5">{modalTitle}</h1>
 
         <label className='text-md mb-1'>タイトル</label>
         <input
           className='w-full h-10 border border-gray-300 rounded-md mb-5 px-3'
           placeholder='買い物'
-          value={title}
-          onChange={(e) => setTile(e.target.value)}
+          value={taskRequestBody.title}
+          onChange={(e) => setTaskRequestBody({ ...taskRequestBody, title: e.target.value })}
         />
 
         <label className='text-md mb-1'>詳細</label>
         <textarea
           className='w-full h-20 border border-gray-300 rounded-md mb-5 px-3'
           placeholder='牛乳を買う'
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={taskRequestBody.description}
+          onChange={(e) => setTaskRequestBody({ ...taskRequestBody, description: e.target.value })}
         />
 
         <label className='text-md mb-1'>期限日</label>
-        <input type="date" className='w-full h-10 border border-gray-300 rounded-md mb-5 px-3' value={date} onChange={(e) => setDate(e.target.value)} />
-
-        <label className='text-md mb-1'>時間</label>
-        <input type="time" className='w-full h-10 border border-gray-300 rounded-md mb-5 px-3' value={time} onChange={(e) => setTime(e.target.value)} />
-
+        <DatePicker className="w-full h-10 border border-gray-300 rounded-md mb-5 px-3" selected={startDate} onChange={(date) => handleDateTimeChange(date)} dateFormat={"yyyy/MM/dd"} placeholderText="クリックして選択" />
 
         <div className="flex justify-end w-full">
           <AddButton title={submitBtnTitle} onClick={onSubmit} />

@@ -1,3 +1,5 @@
+import { TaskRequestBody } from "@/app/schema/tasks/request";
+
 const ORIGIN = 'http://localhost:8000/api/v1';
 
 export type Task = {
@@ -15,24 +17,24 @@ export const getTasks = async () : Promise<Task[]> => {
     return response.json()
 }
 
-export const addTask = async (title: string, description: string, expiration: string) : Promise<Task> => {
+export const addTask = async (taskRequestBody: TaskRequestBody) : Promise<Task> => {
     const response = await fetch(`${ORIGIN}/tasks/add`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, description, expiration }),
+        body: JSON.stringify({ ...taskRequestBody }),
     });
     return response.json()
 }
 
-export const editTask = async (task_id: string, title: string, description: string, expiration: string) : Promise<Task> => {
+export const editTask = async (task_id: string, taskRequestBody: TaskRequestBody) : Promise<Task> => {
     const response = await fetch(`${ORIGIN}/tasks/edit/${task_id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, description, expiration }),
+        body: JSON.stringify({ ...taskRequestBody }),
     });
     return response.json()
 }

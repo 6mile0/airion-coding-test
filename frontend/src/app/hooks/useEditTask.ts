@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { editTask } from "../api/tasks";
+import { TaskRequestBody } from "../schema/tasks/request";
 
 type EditTaskProps = {
-    title: string;
-    description: string;
-    expiration: string;
+    taskRequestBody: TaskRequestBody;
     renewTasks: () => void;
 }
 
-const useEditTask = ({ title, description, expiration, renewTasks }: EditTaskProps) => {
+const useEditTask = ({ taskRequestBody, renewTasks }: EditTaskProps) => {
     const [editTaskId, setEditTaskId] = useState<string>('');
     
     const handleEditTask = () => {
-        editTask(editTaskId, title, description, expiration).then(() => {
+        editTask(editTaskId, taskRequestBody).then(() => {
             renewTasks();
             setEditTaskId('');
         });

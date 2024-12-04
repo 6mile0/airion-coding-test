@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime as dt
 from sqlalchemy.ext.asyncio import AsyncSession
+from utils.convert_to_datetime import convert_to_datetime
 from models.task import Task
 from schemas.tasks.request import TaskEdit, TaskCreate
 
@@ -10,8 +11,8 @@ def create_task(
         title=task_create.title, 
         description=task_create.description, 
         is_done=False, 
-        expires_at=task_create.expires_at, 
-        created_at=datetime.now()
+        expires_at= convert_to_datetime(task_create.expires_at),
+        created_at= dt.now(),
     )
     db.add(task)
     db.commit()
@@ -25,8 +26,8 @@ def update_task(db: AsyncSession, task_id: int, task_edit: TaskEdit) -> Task:
     task = db.query(Task).filter(Task.id == task_id).first()
     task.title = task_edit.title
     task.description = task_edit.description
-    task.expires_at = task_edit.expires_at
-    task.updated_at = datetime.now()
+    task.expires_at = convert_to_datetime(task_edit.expires_at)
+    task.updated_at = dt.now()
     db.commit()
     db.refresh(task)
     return task

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AddButton from '../Buttons/Add';
 
 export type ModalProps = {
@@ -9,15 +9,22 @@ export type ModalProps = {
   submitBtnTitle: string;
   title: string;
   description: string;
+  expiration: string;
+  setExpiration: React.Dispatch<React.SetStateAction<string>>;
   setTile: React.Dispatch<React.SetStateAction<string>>;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const MessageDialog = ({open, onCancel, onSubmit, setTile, setDescription, modalTitle, submitBtnTitle, title, description}: ModalProps) => {
+export const MessageDialog = ({ open, onCancel, onSubmit, setTile, setDescription, modalTitle, submitBtnTitle, title, description, expiration, setExpiration }: ModalProps) => {
+  const [time, setTime] = useState('');
+  const [date, setDate] = useState('');
+
+  
+
   return open && (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 z-10" onClick={() => onCancel()}></div>
-      <div className="bg-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-80 p-5 flex flex-col items-start fixed z-20 rounded-lg shadow-lg">
+      <div className="bg-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-[33rem] p-5 flex flex-col items-start fixed z-20 rounded-lg shadow-lg">
         <h1 className="text-xl font-bold mb-5">{modalTitle}</h1>
 
         <label className='text-md mb-1'>タイトル</label>
@@ -35,6 +42,13 @@ export const MessageDialog = ({open, onCancel, onSubmit, setTile, setDescription
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
+
+        <label className='text-md mb-1'>期限日</label>
+        <input type="date" className='w-full h-10 border border-gray-300 rounded-md mb-5 px-3' value={date} onChange={(e) => setDate(e.target.value)} />
+
+        <label className='text-md mb-1'>時間</label>
+        <input type="time" className='w-full h-10 border border-gray-300 rounded-md mb-5 px-3' value={time} onChange={(e) => setTime(e.target.value)} />
+
 
         <div className="flex justify-end w-full">
           <AddButton title={submitBtnTitle} onClick={onSubmit} />

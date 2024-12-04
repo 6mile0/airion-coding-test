@@ -15,10 +15,11 @@ export default function TaskLists() {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [expiration, setExpiration] = useState('');
 
   const { tasks, handleGetTasks } = useGetTasks();
-  const { handleAddTask } = useAddTask({ title, description, renewTasks: handleGetTasks });
-  const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ title, description, renewTasks: handleGetTasks });
+  const { handleAddTask } = useAddTask({ title, description, expiration, renewTasks: handleGetTasks });
+  const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ title, description, expiration, renewTasks: handleGetTasks });
   const { handleDeleteTask } = useDeleteTask({ renewTasks: handleGetTasks });
 
   const handleOpenModal = (task_id?: string) => {
@@ -27,10 +28,12 @@ export default function TaskLists() {
       const task = tasks.find((task) => task.task_id === task_id);
       setTitle(task?.title || '');
       setDescription(task?.description || '');
+      setExpiration(task?.expires_at || '');
     } else {
       setEditTaskId('');
       setTitle('');
       setDescription('');
+      setExpiration('');
     }
     setIsOpen(true);
   };
@@ -68,6 +71,8 @@ export default function TaskLists() {
             description={description}
             setTile={setTitle}
             setDescription={setDescription}
+            expiration={expiration}
+            setExpiration={setExpiration}
             modalTitle={editTaskId ? 'タスクの編集' : 'タスクの追加'}
             submitBtnTitle={editTaskId ? '保存' : '追加'}
           />

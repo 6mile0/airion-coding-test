@@ -24,7 +24,7 @@ def upgrade() -> None:
     # ### end Alembic commands ###
 
     # 既存のレコードの expires_at カラムに値を設定
-    op.execute("UPDATE task_table SET expires_at = '1970-01-01 00:00:00''")
+    op.execute("UPDATE task_table SET expires_at = '1970-01-01 00:00:00'")
 
     # expires_at カラムに NOT NULL 制約を追加
     op.alter_column('task_table', 'expires_at', nullable=False)

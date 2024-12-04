@@ -15,7 +15,6 @@ export type ModalProps = {
 };
 
 export const MessageDialog = ({ open, onCancel, onSubmit, modalTitle, submitBtnTitle, taskRequestBody, setTaskRequestBody }: ModalProps) => {
-  console.log(taskRequestBody);
   const [startDate, setStartDate] = useState<Date|null>(taskRequestBody.expires_at ? new Date(Number(taskRequestBody.expires_at)) : null);
 
   const handleDateTimeChange = (date: Date | null) => {

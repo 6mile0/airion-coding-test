@@ -8,7 +8,7 @@ export const useGetTasks = () => {
         getTasks().then((data) => {
             setTasks(data);
         });
-    }, [setTasks]);
+    }, []);
 
     const handleGetTasks = async () => {
         getTasks().then((data) => {
@@ -16,5 +16,5 @@ export const useGetTasks = () => {
         });
     };
 
-    return { tasks, handleGetTasks };
+    return { tasks, handleGetTasks, setTasks };
 }

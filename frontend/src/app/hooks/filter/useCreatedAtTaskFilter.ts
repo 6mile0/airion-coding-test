@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { Task } from "../../api/tasks";
 
-export const useCreatedAtTaskFilter = (tasks: Task[], setFilteredTasks: React.Dispatch<React.SetStateAction<Task[]>>) => {
+export const useCreatedAtTaskFilter = (tasks: Task[], setTasks: React.Dispatch<React.SetStateAction<Task[]>>) => {
     const [isAsc, setIsAsc] = useState(false);
-
-    console.log(tasks);
 
     const handleCreateOrder = () => {
         const sortedTasks = [...tasks].sort((a, b) => {
@@ -15,7 +13,7 @@ export const useCreatedAtTaskFilter = (tasks: Task[], setFilteredTasks: React.Di
             }
         });
         setIsAsc(!isAsc);
-        setFilteredTasks(sortedTasks);
+        setTasks(sortedTasks);
     }
 
     return { handleCreateOrder };

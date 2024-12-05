@@ -18,6 +18,10 @@ export const TaskTable = ({ tasks, setFilteredTasks, handleOpenModal, handleDele
   const { handleExpireOrder } = useExpireTaskFilter(tasks, setFilteredTasks);
   const { handleCreateOrder } = useCreatedAtTaskFilter(tasks, setFilteredTasks);
 
+  if(tasks.length === 0) {
+    return <div>タスクがありません</div>
+  }
+
   return (
     <table className="table-auto w-full border-collapse border border-gray-200">
       <thead>

@@ -11,6 +11,8 @@ import { TaskTable } from '../components/TaskTable';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDeleteTask } from '../hooks/useDeleteTask';
 import { TaskRequestBody } from '../schema/tasks/request';
+import { SearchBox } from '../components/SearchBox';
+import { useSearchTask } from '../hooks/search/useSearchTask';
 
 export default function TaskLists() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,10 +27,13 @@ export default function TaskLists() {
   const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ taskRequestBody, renewTasks: handleGetTasks });
   const { handleDeleteTask } = useDeleteTask({ renewTasks: handleGetTasks });
 
+  const { searchResult, searchWord, handleSearch } = useSearchTask(tasks);
+
   const handleOpenModal = (task_id?: string) => {
+    const targetTask = searchResult || tasks;
     if (task_id) {
       setEditTaskId(task_id);
-      const task = tasks.find((task) => task.task_id === task_id);
+      const task = targetTask.find((task) => task.task_id === task_id);
       setTaskRequestBody({
         title: task?.title || '',
         description: task?.description || '',
@@ -61,8 +66,11 @@ export default function TaskLists() {
           <h1 className="text-2xl font-bold mb-4">タスク一覧</h1>
           <AddButton title='タスクの追加' onClick={handleOpenModal} />
         </div>
+        <div className="flex justify-between items-center mb-4">
+          <SearchBox searchWord={searchWord} handleSearch={handleSearch} />
+        </div>
         <TaskTable
-          tasks={tasks}
+          tasks={searchResult || tasks}
           setFilteredTasks={setTasks}
           handleOpenModal={handleOpenModal}
           handleDelete={handleDeleteTask}

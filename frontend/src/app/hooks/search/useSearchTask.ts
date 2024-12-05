@@ -2,8 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { Task } from "../../api/tasks";
 
 export const useSearchTask = (tasks: Task[]) => {
-    console.log(tasks)
-
     const [searchWord, setSearchWord] = useState('');
     const [result, setResult] = useState<Task[] | null>(null);
 

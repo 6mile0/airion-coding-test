@@ -11,6 +11,7 @@ import { TaskTable } from '../components/TaskTable';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDeleteTask } from '../hooks/useDeleteTask';
 import { TaskRequestBody } from '../schema/tasks/request';
+import { SearchBox } from '../components/SearchBox';
 
 export default function TaskLists() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +22,7 @@ export default function TaskLists() {
   });
 
   const { tasks, handleGetTasks } = useGetTasks();
-  const { handleAddTask } = useAddTask({taskRequestBody, renewTasks: handleGetTasks });
+  const { handleAddTask } = useAddTask({ taskRequestBody, renewTasks: handleGetTasks });
   const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ taskRequestBody, renewTasks: handleGetTasks });
   const { handleDeleteTask } = useDeleteTask({ renewTasks: handleGetTasks });
 
@@ -60,6 +61,9 @@ export default function TaskLists() {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold mb-4">タスク一覧</h1>
           <AddButton title='タスクの追加' onClick={handleOpenModal} />
+        </div>
+        <div className="flex justify-between items-center mb-4">
+          <SearchBox />
         </div>
         <TaskTable
           tasks={tasks}

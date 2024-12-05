@@ -16,6 +16,7 @@ export const TaskTable = ({ tasks, handleOpenModal, handleDelete}: TaskTableProp
               <th className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">タイトル</th>
               <th className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">詳細</th>
               <th className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">期日</th>
+              <th className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">作成日</th>
               <th className="border-t border-b border-l border-r border-gray-200 px-4 py-2">操作</th>
             </tr>
           </thead>
@@ -25,6 +26,7 @@ export const TaskTable = ({ tasks, handleOpenModal, handleDelete}: TaskTableProp
                 <td className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">{task.title}</td>
                 <td className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">{task.description}</td>
                 <td className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">{convertDate(task.expires_at)}</td>
+                <td className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">{convertDate(task.created_at)}</td>
                 <td className="border-t border-b border-l border-r border-gray-200 px-4 py-2">
                   <button onClick={() => {
                     handleOpenModal(task.task_id);

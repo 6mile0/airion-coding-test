@@ -8,7 +8,7 @@ type EditTaskProps = {
     renewTasks: () => void;
 }
 
-const useEditTask = ({ taskRequestBody, renewTasks }: EditTaskProps) => {
+export const useEditTask = ({ taskRequestBody, renewTasks }: EditTaskProps) => {
     const [editTaskId, setEditTaskId] = useState<string>('');
     
     const handleEditTask = () => {
@@ -48,5 +48,3 @@ const useEditTask = ({ taskRequestBody, renewTasks }: EditTaskProps) => {
         handleEditTask
     };
 }
-
-export default useEditTask;

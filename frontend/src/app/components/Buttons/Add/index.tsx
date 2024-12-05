@@ -3,7 +3,7 @@ type AddButtonProps = {
     title: string;
 }
 
-const AddButton = ({onClick, title}: AddButtonProps) => {
+export const AddButton = ({onClick, title}: AddButtonProps) => {
     return (
         <button
         onClick={() => onClick()}
@@ -13,5 +13,3 @@ const AddButton = ({onClick, title}: AddButtonProps) => {
       </button>
     )
 }
-
-export default AddButton;

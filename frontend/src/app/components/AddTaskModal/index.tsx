@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import AddButton from '../Buttons/Add';
+import { AddButton } from '../Buttons/Add';
 import { TaskRequestBody } from '@/app/schema/tasks/request';
+
+import "react-datepicker/dist/react-datepicker.css";
 
 export type ModalProps = {
   open: boolean;
@@ -15,7 +16,7 @@ export type ModalProps = {
 };
 
 export const MessageDialog = ({ open, onCancel, onSubmit, modalTitle, submitBtnTitle, taskRequestBody, setTaskRequestBody }: ModalProps) => {
-  const [startDate, setStartDate] = useState<Date|null>(taskRequestBody.expires_at ? new Date(Number(taskRequestBody.expires_at)) : null);
+  const [startDate, setStartDate] = useState<Date | null>(taskRequestBody.expires_at ? new Date(Number(taskRequestBody.expires_at)) : null);
 
   const handleDateTimeChange = (date: Date | null) => {
     setStartDate(date);

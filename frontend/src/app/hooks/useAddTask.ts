@@ -1,16 +1,16 @@
 import { toast, Bounce } from 'react-toastify';
 import { addTask } from '../api/tasks';
+import { TaskRequestBody } from '../schema/tasks/request';
 
 type AddTaskProps = {
-    title: string;
-    description: string;
+    taskRequestBody: TaskRequestBody
     renewTasks: () => void;
 }
 
-export const useAddTask = ({ title, description, renewTasks }: AddTaskProps) => {
+export const useAddTask = ({ taskRequestBody, renewTasks }: AddTaskProps) => {
 
     const handleAddTask = () => {
-        addTask(title, description).then((data) => {
+        addTask(taskRequestBody).then((data) => {
             if (data.task_id) {
                 toast.success('タスクを追加しました', {
                     position: "top-right",

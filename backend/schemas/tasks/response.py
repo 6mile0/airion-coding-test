@@ -8,5 +8,6 @@ class TaskResponse(BaseModel):
     title: str
     description: Optional[str]
     is_done: bool
-    created_at: datetime
-    updated_at: datetime | None
+    expires_at: str
+    created_at: str
+    updated_at: str | None

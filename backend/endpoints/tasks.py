@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from utils.convert_to_unixtime import convert_to_unixtime
 from schemas.tasks.request import TaskCreate
 from schemas.tasks.response import TaskResponse
 from usecase import tasks
@@ -22,8 +23,9 @@ async def read_tasks(db: AsyncSession = Depends(get_db)):
             title=task.title,
             description=task.description,
             is_done=task.is_done,
-            created_at=task.created_at,
-            updated_at=task.updated_at
+            expires_at=convert_to_unixtime(task.expires_at),
+            created_at=convert_to_unixtime(task.created_at),
+            updated_at=convert_to_unixtime(task.updated_at)
         ) for task in res
     ]
 
@@ -35,8 +37,9 @@ async def create_task(task_body: TaskCreate, db: AsyncSession = Depends(get_db))
         title=res.title,
         description=res.description,
         is_done=res.is_done,
-        created_at=res.created_at,
-        updated_at=res.updated_at
+        expires_at=convert_to_unixtime(res.expires_at),
+        created_at=convert_to_unixtime(res.created_at),
+        updated_at=convert_to_unixtime(res.updated_at)
     )
 
 @router.put("/edit/{task_id}", response_model=TaskResponse)
@@ -47,8 +50,9 @@ async def update_task(task_id: str, task_body: TaskCreate, db: AsyncSession = De
         title=res.title,
         description=res.description,
         is_done=res.is_done,
-        created_at=res.created_at,
-        updated_at=res.updated_at
+        expires_at=convert_to_unixtime(res.expires_at),
+        created_at=convert_to_unixtime(res.created_at),
+        updated_at=convert_to_unixtime(res.updated_at)
     )
 
 @router.delete("/delete/{task_id}", response_model=TaskResponse)
@@ -59,6 +63,7 @@ async def delete_task(task_id: str, db: AsyncSession = Depends(get_db)):
         title=res.title,
         description=res.description,
         is_done=res.is_done,
-        created_at=res.created_at,
-        updated_at=res.updated_at
+        expires_at=convert_to_unixtime(res.expires_at),
+        created_at=convert_to_unixtime(res.created_at),
+        updated_at=convert_to_unixtime(res.updated_at)
     )

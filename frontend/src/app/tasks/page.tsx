@@ -20,7 +20,7 @@ export default function TaskLists() {
     expires_at: ''
   });
 
-  const { tasks, handleGetTasks } = useGetTasks();
+  const { tasks, handleGetTasks, setTasks } = useGetTasks();
   const { handleAddTask } = useAddTask({taskRequestBody, renewTasks: handleGetTasks });
   const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ taskRequestBody, renewTasks: handleGetTasks });
   const { handleDeleteTask } = useDeleteTask({ renewTasks: handleGetTasks });
@@ -63,6 +63,7 @@ export default function TaskLists() {
         </div>
         <TaskTable
           tasks={tasks}
+          setFilteredTasks={setTasks}
           handleOpenModal={handleOpenModal}
           handleDelete={handleDeleteTask}
         />

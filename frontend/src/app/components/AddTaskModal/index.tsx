@@ -46,7 +46,13 @@ export const MessageDialog = ({ open, onCancel, onSubmit, modalTitle, submitBtnT
         />
 
         <label className='text-md mb-1'>期限日</label>
-        <DatePicker className="w-full h-10 border border-gray-300 rounded-md mb-5 px-3" selected={startDate} onChange={(date) => handleDateTimeChange(date)} dateFormat={"yyyy/MM/dd"} placeholderText="クリックして選択" />
+        <DatePicker
+          className="w-full h-10 border border-gray-300 rounded-md mb-5 px-3"
+          selected={startDate}
+          onChange={(date) => handleDateTimeChange(date)}
+          dateFormat={"yyyy/MM/dd"}
+          placeholderText="クリックして選択"
+        />
 
         <div className="flex justify-end w-full">
           <AddButton title={submitBtnTitle} onClick={onSubmit} />

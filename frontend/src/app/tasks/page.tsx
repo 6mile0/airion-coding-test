@@ -6,6 +6,7 @@ import { AddButton } from '../components/Buttons/Add';
 import { TaskView } from '../components/TaskView';
 import { TaskRequestBody } from '../schema/tasks/request';
 import { SearchBox } from '../components/SearchBox';
+import { Loading } from '../components/Loading';
 
 import { useGetTasks } from '../hooks/useGetTasks';
 import { useAddTask } from '../hooks/useAddTask';
@@ -26,42 +27,36 @@ export default function TaskLists() {
     expires_at: ''
   });
 
-  const { tasks, handleGetTasks, setTasks } = useGetTasks();
-  const { handleAddTask } = useAddTask({ taskRequestBody, renewTasks: handleGetTasks });
-  const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ taskRequestBody, renewTasks: handleGetTasks });
+  // タスク操作処理
+  const { tasks, handleGetTasks, setTasks, isLoading } = useGetTasks();
+  const { handleOpenAddModal, submitAddTask} = useAddTask({ taskRequestBody, setTaskRequestBody, renewTasks: handleGetTasks });
+  const { handleOpenEditModal, submitEditTask, editTaskId } = useEditTask({ taskRequestBody, setTaskRequestBody, renewTasks: handleGetTasks });
   const { handleDeleteTask } = useDeleteTask({ renewTasks: handleGetTasks });
 
+  // 検索処理
   const { searchResult, searchWord, handleSearch } = useSearchTask(tasks);
 
+  // フィルタ処理
   const { handleExpireOrder } = useExpireTaskFilter(tasks, setTasks);
   const { handleCreateOrder } = useCreatedAtTaskFilter(tasks, setTasks);
 
+  // タスク追加・編集モーダルの表示
   const handleOpenModal = (task_id?: string) => {
     const targetTask = searchResult || tasks;
     if (task_id) {
-      setEditTaskId(task_id);
-      const task = targetTask.find((task) => task.task_id === task_id);
-      setTaskRequestBody({
-        title: task?.title || '',
-        description: task?.description || '',
-        expires_at: task?.expires_at || ''
-      });
+      handleOpenEditModal(task_id, targetTask);
     } else {
-      setEditTaskId('');
-      setTaskRequestBody({
-        title: '',
-        description: '',
-        expires_at: ''
-      });
+      handleOpenAddModal();
     }
     setIsOpen(true);
   };
 
+  // タスク追加・編集送信処理、モーダルの非表示化
   const handleSubmit = () => {
     if (editTaskId) {
-      handleEditTask();
+      submitEditTask();
     } else {
-      handleAddTask();
+      submitAddTask();
     }
     setIsOpen(false);
   };
@@ -76,13 +71,19 @@ export default function TaskLists() {
         <div className="flex justify-between items-center mb-4">
           <SearchBox searchWord={searchWord} handleSearch={handleSearch} />
         </div>
-        <TaskView
-          tasks={searchResult || tasks}
-          handleOpenModal={handleOpenModal}
-          handleDelete={handleDeleteTask}
-          handleExpireOrder={handleExpireOrder}
-          handleCreateOrder={handleCreateOrder}
-        />
+
+        {
+          isLoading ? <Loading /> : (
+            !tasks && searchResult && searchResult.length === 0 ? <p>該当するタスクはありません</p> :
+            <TaskView
+              tasks={searchResult || tasks}
+              handleOpenModal={handleOpenModal}
+              handleDelete={handleDeleteTask}
+              handleExpireOrder={handleExpireOrder}
+              handleCreateOrder={handleCreateOrder}
+            />
+          )
+        }
       </div>
 
       <div className="ml-6">

@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Task } from "../../api/tasks";
 
 export const useSearchTask = (tasks: Task[]) => {
     const [searchWord, setSearchWord] = useState('');
-    const [result, setResult] = useState<Task[]>([]);
-
-    useEffect(() => {
-        setResult(tasks);
-    }, [tasks]);
+    const [result, setResult] = useState<Task[]|null>(null);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const word = e.target.value;

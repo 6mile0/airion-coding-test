@@ -2,17 +2,21 @@
 import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { MessageDialog } from '../components/AddTaskModal';
-import AddButton from '../components/Buttons/Add';
-import { useAddTask } from '../hooks/useAddTask';
-import useEditTask from '../hooks/useEditTask';
-import { useGetTasks } from '../hooks/useGetTasks';
-import { TaskTable } from '../components/TaskTable';
-
-import 'react-toastify/dist/ReactToastify.css';
-import { useDeleteTask } from '../hooks/useDeleteTask';
+import { AddButton } from '../components/Buttons/Add';
+import { TaskView } from '../components/TaskView';
 import { TaskRequestBody } from '../schema/tasks/request';
 import { SearchBox } from '../components/SearchBox';
+
+import { useGetTasks } from '../hooks/useGetTasks';
+import { useAddTask } from '../hooks/useAddTask';
+import { useEditTask } from '../hooks/useEditTask';
+import { useDeleteTask } from '../hooks/useDeleteTask';
+
 import { useSearchTask } from '../hooks/search/useSearchTask';
+import { useExpireTaskFilter } from '../hooks/filter/useExpiresAtTaskFilter';
+import { useCreatedAtTaskFilter } from '../hooks/filter/useCreatedAtTaskFilter';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function TaskLists() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,11 +27,14 @@ export default function TaskLists() {
   });
 
   const { tasks, handleGetTasks, setTasks } = useGetTasks();
-  const { handleAddTask } = useAddTask({taskRequestBody, renewTasks: handleGetTasks });
+  const { handleAddTask } = useAddTask({ taskRequestBody, renewTasks: handleGetTasks });
   const { handleEditTask, editTaskId, setEditTaskId } = useEditTask({ taskRequestBody, renewTasks: handleGetTasks });
   const { handleDeleteTask } = useDeleteTask({ renewTasks: handleGetTasks });
 
   const { searchResult, searchWord, handleSearch } = useSearchTask(tasks);
+
+  const { handleExpireOrder } = useExpireTaskFilter(tasks, setTasks);
+  const { handleCreateOrder } = useCreatedAtTaskFilter(tasks, setTasks);
 
   const handleOpenModal = (task_id?: string) => {
     const targetTask = searchResult || tasks;
@@ -69,11 +76,12 @@ export default function TaskLists() {
         <div className="flex justify-between items-center mb-4">
           <SearchBox searchWord={searchWord} handleSearch={handleSearch} />
         </div>
-        <TaskTable
+        <TaskView
           tasks={searchResult || tasks}
-          setFilteredTasks={setTasks}
           handleOpenModal={handleOpenModal}
           handleDelete={handleDeleteTask}
+          handleExpireOrder={handleExpireOrder}
+          handleCreateOrder={handleCreateOrder}
         />
       </div>
 

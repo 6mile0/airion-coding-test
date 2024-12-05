@@ -29,8 +29,8 @@ export default function TaskLists() {
 
   // タスク操作処理
   const { tasks, handleGetTasks, setTasks, isLoading } = useGetTasks();
-  const { handleOpenAddModal, submitAddTask} = useAddTask({ taskRequestBody, setTaskRequestBody, renewTasks: handleGetTasks });
-  const { handleOpenEditModal, submitEditTask, editTaskId } = useEditTask({ taskRequestBody, setTaskRequestBody, renewTasks: handleGetTasks });
+  const { submitAddTask } = useAddTask({ taskRequestBody, setTaskRequestBody, renewTasks: handleGetTasks });
+  const { handleOpenEditModal, submitEditTask, editTaskId, handleCancelEdit } = useEditTask({ taskRequestBody, setTaskRequestBody, renewTasks: handleGetTasks });
   const { handleDeleteTask } = useDeleteTask({ renewTasks: handleGetTasks });
 
   // 検索処理
@@ -43,11 +43,7 @@ export default function TaskLists() {
   // タスク追加・編集モーダルの表示
   const handleOpenModal = (task_id?: string) => {
     const targetTask = searchResult || tasks;
-    if (task_id) {
-      handleOpenEditModal(task_id, targetTask);
-    } else {
-      handleOpenAddModal();
-    }
+    handleOpenEditModal(targetTask, task_id);
     setIsOpen(true);
   };
 
@@ -59,6 +55,11 @@ export default function TaskLists() {
       submitAddTask();
     }
     setIsOpen(false);
+  };
+
+  const onCancel = () => {
+    setIsOpen(false);
+    handleCancelEdit();
   };
 
   return (
@@ -90,7 +91,7 @@ export default function TaskLists() {
         {isOpen && (
           <MessageDialog
             onSubmit={handleSubmit}
-            onCancel={() => setIsOpen(false)}
+            onCancel={onCancel}
             open={isOpen}
             taskRequestBody={taskRequestBody}
             setTaskRequestBody={setTaskRequestBody}

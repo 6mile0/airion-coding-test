@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { editTask, Task } from "../api/tasks";
 import { TaskRequestBody } from "../schema/tasks/request";
-import { toast, Bounce } from 'react-toastify';
+import { successToast } from "../utils/successToast";
+import { errorToast } from "../utils/errorToast";
 
 type EditTaskProps = {
     taskRequestBody: TaskRequestBody;
@@ -13,11 +14,11 @@ export const useEditTask = ({ taskRequestBody, setTaskRequestBody, renewTasks }:
     const [editTaskId, setEditTaskId] = useState<string>('');
     const [isError, setIsError] = useState(false);
 
-    const handleOpenEditModal = (task_id: string, tasks: Task[]) => {
-        if(!isError) {
+    const handleOpenEditModal = (tasks: Task[], task_id?: string) => {
+        if (!isError && task_id) {
             setEditTaskId(task_id);
             const targetTask = tasks.find((task) => task.task_id === task_id);
-            if(targetTask) {
+            if (targetTask) {
                 setTaskRequestBody({
                     title: targetTask.title,
                     description: targetTask.description,
@@ -26,60 +27,45 @@ export const useEditTask = ({ taskRequestBody, setTaskRequestBody, renewTasks }:
             }
         }
     }
-    
+
+    const handleCancelEdit = () => {
+        setEditTaskId('');
+        setTaskRequestBody({
+            title: '',
+            description: '',
+            expires_at: ''
+        });
+    }
+
     const submitEditTask = () => {
-        if(!taskRequestBody.title || !taskRequestBody.expires_at) {
+        if (!taskRequestBody.title || !taskRequestBody.expires_at) {
             setIsError(true);
-            toast.error('タイトルと期限日は必須です', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            });
+            errorToast('タイトルと期限日は必須です');
             return;
         }
 
         editTask(editTaskId, taskRequestBody).then(() => {
-            toast.success('タスクの編集に成功しました', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            });
+            successToast('タスクを編集しました');
             renewTasks();
             setEditTaskId('');
+            setTaskRequestBody({
+                title: '',
+                description: '',
+                expires_at: ''
+            });
         }).catch((error) => {
             setIsError(true);
             console.error(error);
-            toast.error('タスクの編集に失敗しました', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            });
+            errorToast('タスクの編集に失敗しました');
         });
     }
-    
+
     return {
         isEditError: isError,
         editTaskId,
         setEditTaskId,
         submitEditTask,
-        handleOpenEditModal
+        handleOpenEditModal,
+        handleCancelEdit
     };
 }

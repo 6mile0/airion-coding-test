@@ -10,4 +10,4 @@ class TaskResponse(BaseModel):
     is_done: bool
     expires_at: str
     created_at: str
-    updated_at: str
+    updated_at: str | None

@@ -5,13 +5,21 @@ import { convertDate } from '@/app/utils/convertDate';
 
 type TaskTableProps = {
   tasks: Task[];
+  searchResult: Task[] | null;
   handleOpenModal: (task_id: string) => void;
   handleDelete: (task_id: string) => void;
   handleExpireOrder: () => void;
   handleCreateOrder: () => void;
 }
 
-export const TaskView = ({ tasks, handleOpenModal, handleDelete, handleExpireOrder, handleCreateOrder }: TaskTableProps) => {
+export const TaskView = ({ tasks, searchResult, handleOpenModal, handleDelete, handleExpireOrder, handleCreateOrder }: TaskTableProps) => {
+
+  const targetTasks = searchResult || tasks;
+  
+  if (tasks && searchResult && searchResult.length == 0) {
+    return <p>検索結果がありません</p>
+  }
+
   return (
     <table className="table-auto w-full border-collapse border border-gray-200">
       <thead>
@@ -29,7 +37,7 @@ export const TaskView = ({ tasks, handleOpenModal, handleDelete, handleExpireOrd
       </thead>
       <tbody>
         {
-          tasks.map((task, index) => (
+          targetTasks.map((task, index) => (
             <tr key={index}>
               <td className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">{task.title}</td>
               <td className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">{task.description}</td>

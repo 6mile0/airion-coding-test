@@ -74,9 +74,9 @@ export default function TaskLists() {
 
         {
           isLoading ? <Loading /> : (
-            !tasks && searchResult && searchResult.length === 0 ? <p>該当するタスクはありません</p> :
             <TaskView
-              tasks={searchResult || tasks}
+              tasks={tasks}
+              searchResult={searchResult}
               handleOpenModal={handleOpenModal}
               handleDelete={handleDeleteTask}
               handleExpireOrder={handleExpireOrder}

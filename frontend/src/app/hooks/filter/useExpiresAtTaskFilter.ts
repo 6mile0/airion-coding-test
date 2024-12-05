@@ -1,7 +1,7 @@
 import { Task } from '../../api/tasks';
 import { useState } from 'react';
 
-export const useExpireTaskFilter = (tasks: Task[], setFilteredTasks: React.Dispatch<React.SetStateAction<Task[]>>) => {
+export const useExpireTaskFilter = (tasks: Task[], setTasks: React.Dispatch<React.SetStateAction<Task[]>>) => {
     const [isAsc, setIsAsc] = useState(false);
 
     const handleExpireOrder = () => {
@@ -13,7 +13,7 @@ export const useExpireTaskFilter = (tasks: Task[], setFilteredTasks: React.Dispa
             }
         });
         setIsAsc(!isAsc);
-        setFilteredTasks(sortedTasks);
+        setTasks(sortedTasks);
     }
 
     return { handleExpireOrder };

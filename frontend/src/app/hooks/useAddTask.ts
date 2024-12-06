@@ -1,47 +1,31 @@
-import { toast, Bounce } from 'react-toastify';
 import { addTask } from '../api/tasks';
+import { useState } from 'react';
+import { errorToast } from '../utils/errorToast';
+import { successToast } from '../utils/successToast';
 import { TaskRequestBody } from '../schema/tasks/request';
 
 type AddTaskProps = {
-    taskRequestBody: TaskRequestBody
     renewTasks: () => void;
 }
 
-export const useAddTask = ({ taskRequestBody, renewTasks }: AddTaskProps) => {
+export const useAddTask = ({ renewTasks }: AddTaskProps) => {
+    const [isError, setIsError] = useState(false);
 
-    const handleAddTask = () => {
+    const submitAddTask = (taskRequestBody: TaskRequestBody) => {
         addTask(taskRequestBody).then((data) => {
             if (data.task_id) {
-                toast.success('タスクを追加しました', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                    transition: Bounce,
-                });
+                successToast('タスクを追加しました');
                 renewTasks();
             }
         }).catch((error) => {
+            setIsError(true);
             console.error('Error:', error);
-            toast.error('エラーが発生しました', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            });
+            errorToast('タスクの追加に失敗しました');
         });
     }
 
     return {
-        handleAddTask
+        isAddError: isError,
+        submitAddTask
     };
 }

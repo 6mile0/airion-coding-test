@@ -1,52 +1,29 @@
 import { useState } from "react";
 import { editTask } from "../api/tasks";
+import { successToast } from "../utils/successToast";
+import { errorToast } from "../utils/errorToast";
 import { TaskRequestBody } from "../schema/tasks/request";
-import { toast, Bounce } from 'react-toastify';
 
 type EditTaskProps = {
-    taskRequestBody: TaskRequestBody;
     renewTasks: () => void;
 }
 
-const useEditTask = ({ taskRequestBody, renewTasks }: EditTaskProps) => {
-    const [editTaskId, setEditTaskId] = useState<string>('');
-    
-    const handleEditTask = () => {
+export const useEditTask = ({ renewTasks }: EditTaskProps) => {
+    const [isError, setIsError] = useState(false);
+
+    const submitEditTask = (taskRequestBody: TaskRequestBody, editTaskId: string) => {
         editTask(editTaskId, taskRequestBody).then(() => {
-            toast.success('タスクの編集に成功しました', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            });
+            successToast('タスクを編集しました');
             renewTasks();
-            setEditTaskId('');
         }).catch((error) => {
+            setIsError(true);
             console.error(error);
-            toast.error('タスクの編集に失敗しました', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            });
+            errorToast('タスクの編集に失敗しました');
         });
     }
-    
+
     return {
-        editTaskId,
-        setEditTaskId,
-        handleEditTask
+        isEditError: isError,
+        submitEditTask,
     };
 }
-
-export default useEditTask;

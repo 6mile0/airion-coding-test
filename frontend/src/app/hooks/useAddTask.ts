@@ -1,34 +1,21 @@
 import { addTask } from '../api/tasks';
-import { TaskRequestBody } from '../schema/tasks/request';
 import { useState } from 'react';
 import { errorToast } from '../utils/errorToast';
 import { successToast } from '../utils/successToast';
+import { TaskRequestBody } from '../schema/tasks/request';
 
 type AddTaskProps = {
-    taskRequestBody: TaskRequestBody
-    setTaskRequestBody: (taskRequestBody: TaskRequestBody) => void;
     renewTasks: () => void;
 }
 
-export const useAddTask = ({ taskRequestBody, setTaskRequestBody, renewTasks }: AddTaskProps) => {
+export const useAddTask = ({ renewTasks }: AddTaskProps) => {
     const [isError, setIsError] = useState(false);
 
-    const submitAddTask = () => {
-        if (!taskRequestBody.title || !taskRequestBody.expires_at) {
-            setIsError(true);
-            errorToast('タイトルと期限日は必須です');
-            return;
-        }
-
+    const submitAddTask = (taskRequestBody: TaskRequestBody) => {
         addTask(taskRequestBody).then((data) => {
             if (data.task_id) {
                 successToast('タスクを追加しました');
                 renewTasks();
-                setTaskRequestBody({
-                    title: '',
-                    description: '',
-                    expires_at: ''
-                });
             }
         }).catch((error) => {
             setIsError(true);

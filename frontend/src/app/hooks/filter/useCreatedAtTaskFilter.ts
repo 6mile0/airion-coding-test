@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Task } from "../../api/tasks";
 
 export const useCreatedAtTaskFilter = (tasks: Task[], setTasks: React.Dispatch<React.SetStateAction<Task[]>>) => {
-    const [isAsc, setIsAsc] = useState(false);
+    const [isAsc, setIsAsc] = useState(true);
 
     const handleCreateOrder = () => {
         const sortedTasks = [...tasks].sort((a, b) => {

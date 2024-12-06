@@ -2,7 +2,7 @@ import { Task } from '../../api/tasks';
 import { useState } from 'react';
 
 export const useExpireTaskFilter = (tasks: Task[], setTasks: React.Dispatch<React.SetStateAction<Task[]>>) => {
-    const [isAsc, setIsAsc] = useState(false);
+    const [isAsc, setIsAsc] = useState(true);
 
     const handleExpireOrder = () => {
         const sortedTasks = [...tasks].sort((a, b) => {

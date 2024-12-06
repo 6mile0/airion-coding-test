@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { TaskAddOrEditModal } from '../components/TaskAddOrEditModal';
-import { AddButton } from '../components/Buttons/Add';
+import { AddButton } from '../components/Buttons/AddButton';
 import { TaskView } from '../components/TaskView';
 import { SearchBox } from '../components/SearchBox';
 import { Loading } from '../components/Loading';

@@ -6,13 +6,14 @@ import { convertDate } from '@/app/utils/convertDate';
 type TaskTableProps = {
   tasks: Task[];
   searchResult: Task[] | null;
-  handleOpenModal: (task_id: string) => void;
+  setEditTargetTask: (task: Task) => void;
+  handleModal: () => void;
   handleDelete: (task_id: string) => void;
   handleExpireOrder: () => void;
   handleCreateOrder: () => void;
 }
 
-export const TaskView = ({ tasks, searchResult, handleOpenModal, handleDelete, handleExpireOrder, handleCreateOrder }: TaskTableProps) => {
+export const TaskView = ({ tasks, searchResult, setEditTargetTask, handleDelete, handleExpireOrder, handleCreateOrder, handleModal }: TaskTableProps) => {
 
   const targetTasks = searchResult || tasks;
   
@@ -45,7 +46,8 @@ export const TaskView = ({ tasks, searchResult, handleOpenModal, handleDelete, h
               <td className="text-left border-t border-b border-l border-r border-gray-200 px-4 py-2">{convertDate(task.created_at)}</td>
               <td className="border-t border-b border-l border-r border-gray-200 px-4 py-2">
                 <button onClick={() => {
-                  handleOpenModal(task.task_id);
+                  setEditTargetTask(task);
+                  handleModal();
                 }} className="text-blue-500 mr-2">編集</button>
                 <button onClick={() => handleDelete(task.task_id)} className="text-red-500">削除</button>
               </td>

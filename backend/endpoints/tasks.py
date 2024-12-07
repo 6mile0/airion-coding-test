@@ -5,7 +5,7 @@ from schemas.tasks.request import TaskCreate
 from schemas.tasks.response import TaskResponse
 from usecase import tasks
 
-from dependencies import get_db
+from database import get_db
 
 from typing import List
 

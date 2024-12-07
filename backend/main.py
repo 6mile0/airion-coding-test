@@ -2,7 +2,7 @@ from fastapi import APIRouter, FastAPI, Depends, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 
-from endpoints import tasks
+from endpoints import tasks, auth
 
 app = FastAPI(debug=True)
 router = APIRouter()
@@ -22,6 +22,7 @@ app.add_middleware(
     max_age=600,  # Preflightリクエストのキャッシュ時間（秒）
 )
 
+app.include_router(auth.router)
 app.include_router(tasks.router)
 
 @app.get("/check")

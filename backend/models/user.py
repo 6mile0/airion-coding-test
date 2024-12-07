@@ -14,4 +14,4 @@ class User(Base):
     role = Column(Enum(Role), nullable=False)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, nullable=False)
-    updated_at = Column(DateTime, nullable=False)
+    updated_at = Column(DateTime, nullable=True)

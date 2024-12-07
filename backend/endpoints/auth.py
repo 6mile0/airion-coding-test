@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from usecase.auth import register_user, authenticate_user, create_access_token, get_current_user
+from utils.convert_to_unixtime import convert_to_unixtime
+from usecase.auth import register_new_user, authenticate_user, create_access_token, get_current_user
 
 from schemas.auth.request import LoginRequest, RegisterRequest
 from schemas.auth.response import CreatedUserResponse, TokenResponse, UserResponse
@@ -17,19 +18,10 @@ router = APIRouter(
 
 @router.post("/register", response_model=CreatedUserResponse)
 async def register_user(new_user_req: RegisterRequest, db: AsyncSession = Depends(get_db)):
-    res = register_user(db, new_user_req)
-    token = create_access_token(res)
-
+    res = register_new_user(db, new_user_req)
     return CreatedUserResponse(
-        user_id=res.id,
-        username=res.name,
-        email=res.mail,
-        access_token=TokenResponse(
-            access_token=token,
-            token_type="bearer"
-        ),
-        created_at="",
-        updated_at=""
+        username=res.user_name,
+        email=res.email
     )
 
 @router.post("/login", response_model=TokenResponse)
@@ -44,10 +36,20 @@ async def login_user(
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = create_access_token(user)
+    token = create_access_token(user)
     return TokenResponse(
-        access_token=access_token,
-        token_type="bearer"
+        access_token=token.access_token,
+        token_type=token.token_type,
+        expired_at=convert_to_unixtime(token.expired_at),
+        current_user=UserResponse(
+            user_id=user.id,
+            user_name=user.user_name,
+            email=user.email,
+            role=user.role,
+            is_active=user.is_active,
+            created_at=convert_to_unixtime(user.created_at),
+            updated_at=convert_to_unixtime(user.updated_at)
+        )
     )
 
 @router.post("/me", response_model=UserResponse)
@@ -55,9 +57,10 @@ async def auth_me(authorization: HTTPAuthorizationCredentials = Depends(HTTPBear
     current_user = get_current_user(authorization.credentials, db)
     return UserResponse(
         user_id=current_user.id,
-        name=current_user.name,
-        email=current_user.mail,
-        disabled=False,
-        created_at="",
-        updated_at=""
+        user_name=current_user.user_name,
+        email=current_user.email,
+        role=current_user.role,
+        is_active=current_user.is_active,
+        created_at=convert_to_unixtime(current_user.created_at),
+        updated_at=convert_to_unixtime(current_user.updated_at)
     )

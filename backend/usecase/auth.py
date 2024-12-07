@@ -1,15 +1,17 @@
 from datetime import datetime, timedelta, timezone
 from typing import Union
 from sqlalchemy.ext.asyncio import AsyncSession
+from datetime import datetime as dt
 
 from jose import jwt
 from jose.exceptions import JWTError
 
-from fastapi import Depends, FastAPI, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import FastAPI, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
+from models.role import Role
 from schemas.auth.request import RegisterRequest
 
 from models.user import User
@@ -25,8 +27,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")) or 3
 class Token(BaseModel):
     access_token: str
     token_type: str
-
-
+    expired_at: datetime
+    
 class TokenData(BaseModel):
     email: str
 
@@ -57,21 +59,21 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 def authenticate_user(db: AsyncSession, email: str, password: str):
-    user = db.query(User).filter(User.mail == email).first()
+    user = db.query(User).filter(User.email == email).first()
     if not user:
         return False
-    if not verify_password(password, user.password):
+    if not verify_password(password, user.hashed_password):
         return False
     return user
 
 def create_access_token(user_data: User):
-    data = {"sub": user_data.mail}
+    data = {"sub": user_data.email}
     expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + expires_delta
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    return Token(access_token=encoded_jwt, token_type="bearer", expired_at=expire)
 
 def get_current_user(token: str, db: AsyncSession):
     credentials_exception = HTTPException(
@@ -84,30 +86,32 @@ def get_current_user(token: str, db: AsyncSession):
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
-        email_data = TokenData(email=email)
+        data = TokenData(email=email)
     except JWTError:
         raise credentials_exception
     
-    user = db.query(User).filter(User.mail == email_data.email).first()
+    user = db.query(User).filter(User.email == data.email).first()
 
     if user is None:
         raise credentials_exception
     return user
 
 
-def register_user(db, user: RegisterRequest):
-    if db.query(User).filter(User.mail == user.email).first():
+def register_new_user(db, user: RegisterRequest):
+    if db.query(User).filter(User.email == user.email).first():
         raise HTTPException(
             status_code=400,
             detail="Email already registered"
         )
     
     new_user = User(
-        name=user.username,
-        mail=user.email,
-        password=get_password_hash(user.password),
-        token="",
-        token_expires="9999-12-31 23:59:59"
+        email=user.email,
+        user_name=user.username,
+        hashed_password=get_password_hash(user.password),
+        role=Role.USER,
+        is_active=True,
+        created_at=dt.now(),
+        updated_at=None
     )
     db.add(new_user)
     db.commit()

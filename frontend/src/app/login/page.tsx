@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { LoginRequestBody } from "../schema/auth/request";
 import { useAuthUserContext } from "../providers/AuthUserProvider";
+import Link from "next/link";
 
 export default function Login() {
     const { onLogin } = useAuthUserContext();
@@ -44,13 +45,10 @@ export default function Login() {
                 </form>
 
                 <div className="text-sm text-center">
-                    <a href="#" className="text-blue-600 hover:underline">パスワードを忘れた場合</a>
-                </div>
-
-
-                <div className="text-sm text-center">
                     <p>アカウントをお持ちでない場合</p>
-                    <a href="#" className="text-blue-600 hover:underline">新規登録</a>
+                    <Link href="/register" className="text-blue-600 hover:underline">
+                        新規登録
+                    </Link>
                 </div>
             </div>
         </div>

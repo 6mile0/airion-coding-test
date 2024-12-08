@@ -1,6 +1,6 @@
 "use client";
 import { LoginRequestBody } from "@/app/schema/auth/request";
-import { getCurrentUser, login, logout } from "../../api/auth";
+import { getCurrentUser, login, logout, register } from "../../api/auth";
 import { UserResponse } from "../../schema/auth/response";
 import { useEffect, useState } from "react";
 import { successToast } from "../../utils/successToast";
@@ -32,7 +32,7 @@ export const useAuthUser = () => {
             successToast('ログインしました')
             router.push('/');
         }).catch((error) => {
-            errorToast('ログインに失敗しました');
+            errorToast(error.message);
             setError(error);
         }).finally(() => {
             setIsLoading(false);
@@ -55,5 +55,21 @@ export const useAuthUser = () => {
         });
     }
 
-    return { isLoading, error, user, onLogin, onLogout };
+    const onRegister = async (loginRequestBody: LoginRequestBody) => {
+        setIsLoading(true);
+        setError(null);
+
+        register(loginRequestBody).then(() => {
+            successToast('ユーザー登録しました')
+            router.push('/login');
+        }).catch((error) => {
+            errorToast(error.message);
+            setError(error);
+        }).finally(() => {
+            setIsLoading(false);
+        });
+    }
+
+    
+    return { isLoading, error, user, onLogin, onLogout, onRegister};
 }

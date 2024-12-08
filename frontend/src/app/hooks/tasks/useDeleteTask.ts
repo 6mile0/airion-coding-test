@@ -1,6 +1,6 @@
-import { deleteTask } from "../api/tasks";
-import { errorToast } from '../utils/errorToast';
-import { successToast } from '../utils/successToast';
+import { deleteTask } from "../../api/tasks";
+import { errorToast } from '../../utils/errorToast';
+import { successToast } from '../../utils/successToast';
 
 type DeleteTaskProps = {
     renewTasks: () => void;

@@ -13,7 +13,13 @@ export type Task = {
 }
 
 export const getTasks = async () : Promise<Task[]> => {
-    const response = await fetch(`${ORIGIN}/tasks`);
+    const response = await fetch(`${ORIGIN}/tasks`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
     return response.json()
 }
 
@@ -23,6 +29,7 @@ export const addTask = async (taskRequestBody: TaskRequestBody) : Promise<Task> 
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ ...taskRequestBody }),
     });
     return response.json()
@@ -34,6 +41,7 @@ export const editTask = async (task_id: string, taskRequestBody: TaskRequestBody
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ ...taskRequestBody }),
     });
     return response.json()
@@ -43,6 +51,10 @@ export const editTask = async (task_id: string, taskRequestBody: TaskRequestBody
 export const deleteTask = async (task_id: string) : Promise<Task> => {
     const response = await fetch(`${ORIGIN}/tasks/delete/${task_id}`, {
         method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
     });
     return response.json()
 }

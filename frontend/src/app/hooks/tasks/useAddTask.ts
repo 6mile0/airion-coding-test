@@ -1,8 +1,8 @@
-import { addTask } from '../api/tasks';
+import { addTask } from '../../api/tasks';
 import { useState } from 'react';
-import { errorToast } from '../utils/errorToast';
-import { successToast } from '../utils/successToast';
-import { TaskRequestBody } from '../schema/tasks/request';
+import { errorToast } from '../../utils/errorToast';
+import { successToast } from '../../utils/successToast';
+import { TaskRequestBody } from '../../schema/tasks/request';
 
 type AddTaskProps = {
     renewTasks: () => void;

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { editTask } from "../api/tasks";
-import { successToast } from "../utils/successToast";
-import { errorToast } from "../utils/errorToast";
-import { TaskRequestBody } from "../schema/tasks/request";
+import { editTask } from "../../api/tasks";
+import { successToast } from "../../utils/successToast";
+import { errorToast } from "../../utils/errorToast";
+import { TaskRequestBody } from "../../schema/tasks/request";
 
 type EditTaskProps = {
     renewTasks: () => void;

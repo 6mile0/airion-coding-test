@@ -1,23 +1,23 @@
 "use client";
 import { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
 import { TaskAddOrEditModal } from '../components/TaskAddOrEditModal';
 import { AddButton } from '../components/Buttons/AddButton';
 import { TaskView } from '../components/TaskView';
 import { SearchBox } from '../components/SearchBox';
 import { Loading } from '../components/Loading';
 
-import { useGetTasks } from '../hooks/useGetTasks';
-import { useDeleteTask } from '../hooks/useDeleteTask';
+import { useGetTasks } from '../hooks/tasks/useGetTasks';
+import { useDeleteTask } from '../hooks/tasks/useDeleteTask';
 
 import { useSearchTask } from '../hooks/search/useSearchTask';
 import { useExpireTaskFilter } from '../hooks/filter/useExpiresAtTaskFilter';
 import { useCreatedAtTaskFilter } from '../hooks/filter/useCreatedAtTaskFilter';
 
-import 'react-toastify/dist/ReactToastify.css';
 import { Task } from '../api/tasks';
+import { AuthGuard } from '../components/guard/AuthGuard';
 
-export default function TaskLists() {
+const TaskComponent = (): JSX.Element => {
+
   const [isOpen, setIsOpen] = useState(false);
   const [editTargetTask, setEditTargetTask] = useState<Task | null>(null);
 
@@ -75,10 +75,14 @@ export default function TaskLists() {
           />
         )}
       </div>
-
-      <div className="fixed bottom-0 right-0 p-4">
-        <ToastContainer />
-      </div>
     </div>
   );
+}
+
+export default function TaskLists() {
+  return (
+    <AuthGuard>
+      <TaskComponent />
+    </AuthGuard>
+  )
 }

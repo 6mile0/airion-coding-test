@@ -1,18 +1,14 @@
-from datetime import datetime, timedelta, timezone
-from fastapi.encoders import jsonable_encoder
-from typing import Dict, Union
+from datetime import datetime
+from typing import Union
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime as dt
-import secrets
 
-from jose import jwt
-from jose.exceptions import JWTError
-
-from fastapi import FastAPI, HTTPException, status
+from fastapi import Cookie, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
+from utils.session_id_store import SessionStore
 from models.role import Role
 from schemas.auth.request import RegisterRequest
 
@@ -48,6 +44,8 @@ class UserInDB(AuthenticatedUser):
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+sesson_store = SessionStore()
 
 app = FastAPI()
 
@@ -89,3 +87,20 @@ def register_new_user(db, user: RegisterRequest):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+def check_cookie(session_id: str | None = Cookie(None)):
+    if session_id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Session ID is required",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    if not sesson_store.is_session_valid(session_id):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Session ID is invalid",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    return session_id

@@ -22,3 +22,8 @@ class TokenResponse(BaseModel):
     token_type: str
     expired_at: str
     current_user: UserResponse
+
+class RefreshTokenResponse(BaseModel):
+    access_token: str
+    token_type: str
+    expired_at: str

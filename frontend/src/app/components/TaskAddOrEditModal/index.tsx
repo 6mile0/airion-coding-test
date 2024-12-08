@@ -5,8 +5,8 @@ import { TaskRequestBody } from '../../schema/tasks/request';
 import { Task } from "../../api/tasks";
 
 
-import { useEditTask } from "../../hooks/useEditTask";
-import { useAddTask } from "../../hooks/useAddTask";
+import { useEditTask } from "../../hooks/tasks/useEditTask";
+import { useAddTask } from "../../hooks/tasks/useAddTask";
 
 import "react-datepicker/dist/react-datepicker.css";
 

@@ -9,6 +9,7 @@ type AuthUserContextType = {
     isLoginLoading: boolean;
     onLogin: (loginRequestBody: LoginRequestBody) => void;
     onLogout: () => void;
+    onRegister: (registerRequestBody: LoginRequestBody) => void;
     error: string | null;
 };
 
@@ -24,10 +25,10 @@ export const useAuthUserContext = () => {
 }
 
 export const AuthUserProvider = ({ children }: { children: React.ReactNode }) => {
-   const { isLoading, error, user, onLogin, onLogout } = useAuthUser();
+   const { isLoading, error, user, onLogin, onLogout, onRegister } = useAuthUser();
 
     return (
-        <AuthUserContext.Provider value={{ currentUser: user, isLoginLoading: isLoading, onLogin, onLogout, error }}>
+        <AuthUserContext.Provider value={{ currentUser: user, isLoginLoading: isLoading, onLogin, onLogout, error, onRegister }}>
             {children}
         </AuthUserContext.Provider>
     )

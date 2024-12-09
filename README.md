@@ -81,6 +81,12 @@ postgres=# \dt
 ```
 
 ## Step4 : フロントエンド起動
+- 環境変数設定
+`/workspace/frontend/.env.sample` をコピーして `.env.local` を作成する．
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
 - 以下のコマンドを実行してフロントエンドを立ち上げる．
 ```bash
 cd /workspace/frontend

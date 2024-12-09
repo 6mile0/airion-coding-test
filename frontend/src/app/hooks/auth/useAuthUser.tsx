@@ -5,13 +5,13 @@ import { UserResponse } from "../../schema/auth/response";
 import { useEffect, useState } from "react";
 import { successToast } from "../../utils/successToast";
 import { errorToast } from "../../utils/errorToast";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export const useAuthUser = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isLogout, setIsLogout] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [user, setUser] = useState<UserResponse | null>(null);
-    const router = useRouter();
 
     useEffect(() => {
         getCurrentUser().then((data) => {
@@ -30,13 +30,13 @@ export const useAuthUser = () => {
         login(loginRequestBody).then((data) => {
             setUser(data);
             successToast('ログインしました')
-            router.push('/');
         }).catch((error) => {
             errorToast(error.message);
             setError(error);
         }).finally(() => {
             setIsLoading(false);
         });
+        redirect('/');
     };
 
     const onLogout = async () => {
@@ -45,13 +45,13 @@ export const useAuthUser = () => {
 
         logout().then(() => {
             setUser(null);
+            setIsLogout(true);
             successToast('ログアウトしました');
         }).catch((error) => {
             errorToast('ログアウトに失敗しました');
             setError(error);
         }).finally(() => {
             setIsLoading(false);
-            redirect('/login');
         });
     }
 
@@ -61,7 +61,7 @@ export const useAuthUser = () => {
 
         register(loginRequestBody).then(() => {
             successToast('ユーザー登録しました')
-            router.push('/login');
+            redirect('/login');
         }).catch((error) => {
             errorToast(error.message);
             setError(error);
@@ -71,5 +71,5 @@ export const useAuthUser = () => {
     }
 
     
-    return { isLoading, error, user, onLogin, onLogout, onRegister};
+    return { isLoading, isLogout, setIsLoading, error, user, onLogin, onLogout, onRegister};
 }

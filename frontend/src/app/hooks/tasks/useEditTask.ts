@@ -17,7 +17,7 @@ export const useEditTask = ({ renewTasks }: EditTaskProps) => {
             renewTasks();
         }).catch((error) => {
             setIsError(true);
-            console.error(error);
+            console.error(error); // TODO: Sentryにつなげる
             errorToast('タスクの編集に失敗しました');
         });
     }

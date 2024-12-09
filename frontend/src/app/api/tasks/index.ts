@@ -1,19 +1,12 @@
 import { TaskRequestBody } from "@/app/schema/tasks/request";
+import { TaskResponse } from "@/app/schema/tasks/response";
 
-const ORIGIN = 'http://localhost:8000/api/v1';
-
-export type Task = {
-    task_id: string
-    title: string
-    description: string
-    is_done: boolean
-    expires_at: string
-    created_at: string
-    updated_at: string
+if(process.env.NEXT_PUBLIC_API_BASE_URL === undefined) {
+    throw new Error("NEXT_PUBLIC_API_BASE_URL is not defined")
 }
 
-export const getTasks = async () : Promise<Task[]> => {
-    const response = await fetch(`${ORIGIN}/tasks`, {
+export const getTasks = async () : Promise<TaskResponse[]> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/tasks`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -23,8 +16,8 @@ export const getTasks = async () : Promise<Task[]> => {
     return response.json()
 }
 
-export const addTask = async (taskRequestBody: TaskRequestBody) : Promise<Task> => {
-    const response = await fetch(`${ORIGIN}/tasks/add`, {
+export const addTask = async (taskRequestBody: TaskRequestBody) : Promise<TaskResponse> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/tasks/add`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -35,8 +28,8 @@ export const addTask = async (taskRequestBody: TaskRequestBody) : Promise<Task> 
     return response.json()
 }
 
-export const editTask = async (task_id: string, taskRequestBody: TaskRequestBody) : Promise<Task> => {
-    const response = await fetch(`${ORIGIN}/tasks/edit/${task_id}`, {
+export const editTask = async (task_id: string, taskRequestBody: TaskRequestBody) : Promise<TaskResponse> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/tasks/edit/${task_id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -48,8 +41,8 @@ export const editTask = async (task_id: string, taskRequestBody: TaskRequestBody
 }
 
 
-export const deleteTask = async (task_id: string) : Promise<Task> => {
-    const response = await fetch(`${ORIGIN}/tasks/delete/${task_id}`, {
+export const deleteTask = async (task_id: string) : Promise<TaskResponse> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/tasks/delete/${task_id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

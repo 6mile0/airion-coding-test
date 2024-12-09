@@ -7,18 +7,13 @@ import Link from "next/link";
 
 export default function Login() {
     const { onLogin } = useAuthUserContext();
-
     const { register, handleSubmit, formState: { errors } } = useForm<LoginRequestBody>();
-
-    const onSubmit = (data: LoginRequestBody) => {
-        onLogin(data);
-    };
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
                 <h1 className="text-2xl font-bold text-center">ログイン</h1>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onLogin)} className="space-y-4">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">メールアドレス</label>
                         <input

@@ -1,5 +1,5 @@
-import { Task } from '../../api/tasks';
 import { useState } from 'react';
+import { Task } from '../../../../model/task';
 
 export const useExpireTaskFilter = (tasks: Task[], setTasks: React.Dispatch<React.SetStateAction<Task[]>>) => {
     const [isAsc, setIsAsc] = useState(true);

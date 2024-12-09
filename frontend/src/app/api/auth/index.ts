@@ -1,8 +1,12 @@
 import { CreatedUserResponse, UserResponse } from "@/app/schema/auth/response";
 import { LoginRequestBody } from "../../schema/auth/request";
 
+if(process.env.NEXT_PUBLIC_API_BASE_URL === undefined) {
+    throw new Error("NEXT_PUBLIC_API_BASE_URL is not defined")
+}
+
 export const login = async (loginRequestBody: LoginRequestBody) : Promise<UserResponse> => {
-    const response = await fetch(`http://localhost:8000/api/v1/auth/login`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -19,7 +23,7 @@ export const login = async (loginRequestBody: LoginRequestBody) : Promise<UserRe
 }
 
 export const getCurrentUser = async () : Promise<UserResponse | null> => {
-    const response = await fetch(`http://localhost:8000/api/v1/auth/me`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/auth/me`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -33,7 +37,7 @@ export const getCurrentUser = async () : Promise<UserResponse | null> => {
 }
 
 export const logout = async () => {
-    await fetch(`http://localhost:8000/api/v1/auth/logout`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/auth/logout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -41,7 +45,7 @@ export const logout = async () => {
 }
 
 export const register = async (loginRequestBody: LoginRequestBody) : Promise<CreatedUserResponse> => {
-    const response = await fetch(`http://localhost:8000/api/v1/auth/register`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

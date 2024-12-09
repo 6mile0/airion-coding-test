@@ -19,7 +19,7 @@ export const useAddTask = ({ renewTasks }: AddTaskProps) => {
             }
         }).catch((error) => {
             setIsError(true);
-            console.error('Error:', error);
+            console.error('Error:', error); // TODO: Sentryにつなげる
             errorToast('タスクの追加に失敗しました');
         });
     }

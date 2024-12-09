@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Task } from "../../api/tasks";
+import { Task } from "../../../../model/task";
 
 export const useCreatedAtTaskFilter = (tasks: Task[], setTasks: React.Dispatch<React.SetStateAction<Task[]>>) => {
     const [isAsc, setIsAsc] = useState(true);

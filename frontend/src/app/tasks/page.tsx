@@ -13,8 +13,8 @@ import { useSearchTask } from '../hooks/search/useSearchTask';
 import { useExpireTaskFilter } from '../hooks/filter/useExpiresAtTaskFilter';
 import { useCreatedAtTaskFilter } from '../hooks/filter/useCreatedAtTaskFilter';
 
-import { Task } from '../api/tasks';
 import { AuthGuard } from '../components/guard/AuthGuard';
+import { Task } from '../../../model/task';
 
 const TaskComponent = (): JSX.Element => {
 

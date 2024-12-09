@@ -1,7 +1,7 @@
 import React from 'react';
-import { Task } from '../../api/tasks';
 import { FilterButton } from '../Buttons/FilterButton';
 import { convertDate } from '@/app/utils/convertDate';
+import { Task } from '../../../../model/task';
 
 type TaskTableProps = {
   tasks: Task[];
@@ -16,8 +16,12 @@ type TaskTableProps = {
 export const TaskView = ({ tasks, searchResult, setEditTargetTask, handleDelete, handleExpireOrder, handleCreateOrder, handleModal }: TaskTableProps) => {
 
   const targetTasks = searchResult || tasks;
+
+  if (!tasks || tasks.length == 0) {
+    return <p>タスクがありません</p>
+  }
   
-  if (tasks && searchResult && searchResult.length == 0) {
+  if (tasks && !(tasks.length == 0) && searchResult && searchResult.length == 0) {
     return <p>検索結果がありません</p>
   }
 

@@ -7,9 +7,11 @@ import { LoginRequestBody } from "../schema/auth/request";
 type AuthUserContextType = {
     currentUser: UserResponse | null;
     isLoginLoading: boolean;
+    setIsLoginLoading: (value: boolean) => void;
     onLogin: (loginRequestBody: LoginRequestBody) => void;
     onLogout: () => void;
     onRegister: (registerRequestBody: LoginRequestBody) => void;
+    isLogout: boolean;
     error: string | null;
 };
 
@@ -25,10 +27,10 @@ export const useAuthUserContext = () => {
 }
 
 export const AuthUserProvider = ({ children }: { children: React.ReactNode }) => {
-   const { isLoading, error, user, onLogin, onLogout, onRegister } = useAuthUser();
+   const { isLoading, setIsLoading, error, user, onLogin, onLogout, onRegister, isLogout } = useAuthUser();
 
     return (
-        <AuthUserContext.Provider value={{ currentUser: user, isLoginLoading: isLoading, onLogin, onLogout, error, onRegister }}>
+        <AuthUserContext.Provider value={{ currentUser: user, isLoginLoading: isLoading, onLogin, onLogout, error, onRegister, setIsLoginLoading: setIsLoading, isLogout }}>
             {children}
         </AuthUserContext.Provider>
     )

@@ -15,7 +15,7 @@ export const useDeleteTask = ({ renewTasks }: DeleteTaskProps) => {
                 renewTasks();
             }
         }).catch((error) => {
-            console.error(error);
+            console.error(error); // TODO: Sentryにつなげる
             errorToast('タスクの削除に失敗しました');
         });
     }

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Task } from "../../api/tasks";
+import { Task } from "../../../../model/task";
 
 export const useSearchTask = (tasks: Task[]) => {
     const [searchWord, setSearchWord] = useState('');

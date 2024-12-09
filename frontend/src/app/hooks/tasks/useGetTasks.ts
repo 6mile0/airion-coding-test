@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getTasks, Task } from "../../api/tasks";
+import { getTasks } from "../../api/tasks";
+import { Task } from "../../../../model/task";
 
 export const useGetTasks = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -18,6 +19,8 @@ export const useGetTasks = () => {
         setIsLoading(true);
         getTasks().then((data) => {
             setTasks(data);
+        }).catch((error) => {
+            console.error(error); // TODO: Sentryにつなげる
         }).finally(() => {
             setIsLoading(false);
         });

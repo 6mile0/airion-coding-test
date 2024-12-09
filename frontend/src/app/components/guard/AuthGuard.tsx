@@ -13,7 +13,7 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     }
 
     if (!currentUser) {
-        redirect("/login");
+        redirect('/login');
     }
 
     return <>{children}</>;

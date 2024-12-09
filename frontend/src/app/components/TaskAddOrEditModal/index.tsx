@@ -2,7 +2,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { TaskRequestBody } from '../../schema/tasks/request';
-import { Task } from "../../api/tasks";
+import { Task } from "../../../../model/task";
 
 
 import { useEditTask } from "../../hooks/tasks/useEditTask";
@@ -32,8 +32,6 @@ export const TaskAddOrEditModal = ({ open, modalTitle, submitBtnTitle, handleGet
   const { submitEditTask } = useEditTask({ renewTasks: handleGetTasks});
 
   const onSubmit: SubmitHandler<TaskRequestBody> = (data) => {
-
-    console.log('data:', data);
     if (editTargetTask) {
       submitEditTask(data, editTargetTask.task_id);
     }else {

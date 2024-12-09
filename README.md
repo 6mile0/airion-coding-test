@@ -81,12 +81,17 @@ postgres=# \dt
 ```
 
 ## Step4 : フロントエンド起動
-- 以下のコマンドを実行してフロントエンドを立ち上げる．
+- 環境変数設定
+`/workspace/frontend/.env.sample` をコピーして `.env.local` を作成する．
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
 
+- 以下のコマンドを実行してフロントエンドを立ち上げる．
 ```bash
 cd /workspace/frontend
 npm install
-yarn dev -p 4989
+npm run dev
 ```
 
 `localhost:4989` をブラウザで開き，立ち上がっていることを確認する．
@@ -94,14 +99,8 @@ yarn dev -p 4989
 ## Step5 : バックエンド起動
 - 以下のコマンドを実行してバックエンドを立ち上げる．
 ```bash
-cd /workspace/backend
-uvicorn main:app --reload --port=8600
+cd /workspace/backend && python main.py
 ```
 
 - VScodeの拡張機能である `Thunder Client` や `Postman` を利用してAPIのテストを行う．
 - `http://localhost:8600/check` に GET リクエストを送信すると正常に起動しているかの確認が行える．
-
-## Tips
-- FastAPIで作成されたAPIを確認するには `localhost:8600/docs` を参照する．
-- [Frontend開発方法](/public/frontend.md)
-- [Backend開発方法](/public/backend.md)
